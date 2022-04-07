@@ -5,14 +5,16 @@ import utilStyles from '../styles/utils.module.css'
 import Link from 'next/link'
 
 const name = 'UPE Nu Blog'
-export const siteTitle = 'UPE Nu Blog'
+const siteTitle = 'UPE Nu Blog'
 
 export default function Layout({
   children,
-  home
+  home,
+  title
 }: {
   children: React.ReactNode
   home?: boolean
+  title?: string
 }) {
   return (
     <div className={styles.container}>
@@ -30,6 +32,7 @@ export default function Layout({
         />
         <meta name="og:title" content={siteTitle} />
         <meta name="twitter:card" content="summary_large_image" />
+        <title>{title ? `${title} – ` : ""}{siteTitle}</title>
       </Head>
       <header className={styles.header}>
         {home ? (

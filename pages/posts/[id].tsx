@@ -1,5 +1,5 @@
 import Layout from '../../components/layout'
-import { getAllPostIds, getPostData } from '../../lib/posts'
+import { getAllPostIds, getPostData, PostData, PostId } from '../../lib/posts'
 import Head from 'next/head'
 import Date from '../../components/date'
 import utilStyles from '../../styles/utils.module.css'
@@ -8,11 +8,7 @@ import { GetStaticProps, GetStaticPaths } from 'next'
 export default function Post({
   postData
 }: {
-  postData: {
-    title: string
-    date: string
-    contentHtml: string
-  }
+  postData: PostData
 }) {
   return (
     <Layout>
@@ -22,7 +18,7 @@ export default function Post({
       <article>
         <h1 className={utilStyles.headingXl}>{postData.title}</h1>
         <div className={utilStyles.lightText}>
-          <Date dateString={postData.date} />
+          <Date dateString={postData.publishDate} />
         </div>
         <div dangerouslySetInnerHTML={{ __html: postData.contentHtml }} />
       </article>
@@ -30,8 +26,13 @@ export default function Post({
   )
 }
 
+function transformPostIdsToPathParams(postIds: PostId[]): { params: PostId }[] {
+  return postIds.map(postId => ({ params: postId }));
+}
+
 export const getStaticPaths: GetStaticPaths = async () => {
-  const paths = getAllPostIds()
+  const postIds: PostId[] = getAllPostIds()
+  const paths = transformPostIdsToPathParams(postIds);
   return {
     paths,
     fallback: false
