@@ -13,20 +13,22 @@ export default function Home({
   return (
     <Layout home>
       <section className={utilStyles.headingMd}>
-        <p>[ subtitle ]</p>
+        <p><em>This website is in Beta!</em></p>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
         <ul className={utilStyles.list}>
-          {allPostsData.map(({ id, publishDate, title }) => (
-            <li className={utilStyles.listItem} key={id}>
-              <Link href={`/posts/${id}`}>
-                <a>{title}</a>
+          {allPostsData.map((postMetadata) => (
+            <li className={utilStyles.listItem} key={postMetadata.id}>
+              <Link href={`/posts/${postMetadata.id}`}>
+                <a>{postMetadata.title}</a>
               </Link>
               <br />
-              <small className={utilStyles.lightText}>
-                <Date dateString={publishDate} />
-              </small>
+                {postMetadata.publishDate
+                ? <small className={utilStyles.lightText}>
+                    <Date dateString={postMetadata.publishDate} />
+                  </small>
+                : <></>}
             </li>
           ))}
         </ul>
@@ -36,10 +38,10 @@ export default function Home({
 }
 
 export const getStaticProps: GetStaticProps = async () => {
-  const allPostsData = getSortedPostsData()
+  const allPostsData = getSortedPostsData();
   return {
     props: {
       allPostsData
     }
-  }
+  };
 }

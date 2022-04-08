@@ -4,18 +4,24 @@ import matter from 'gray-matter'
 import { remark } from 'remark'
 import html from 'remark-html'
 
-const postsDirectory = path.join(process.cwd(), 'posts')
+const postsDirectory = path.join(process.cwd(), 'pages/posts')
 
-type Frontmatter = {
+export type Frontmatter = {
   title: string;
-  publishDate: string;
+  publishDate?: string;
+  author: string;
+  subtitle?: string;
+  hide?: boolean;
 };
 
 export type PostMetadata = Frontmatter & PostId;
 
-export function getSortedPostsData(): PostMetadata[] {
+export type GetSortedPostsDataOptions = {
+  ignoreHidden?: boolean; // default: true
+}
+export function getSortedPostsData(options: GetSortedPostsDataOptions = {}): PostMetadata[] {
   // Get file names under /posts
-  const fileNames = fs.readdirSync(postsDirectory)
+  const fileNames = fs.readdirSync(postsDirectory);
   const allPostsData = fileNames.map(fileName => {
     // Remove ".md" from file name to get id
     const id = fileName.replace(/\.md$/, '')
@@ -25,14 +31,18 @@ export function getSortedPostsData(): PostMetadata[] {
     const fileContents = fs.readFileSync(fullPath, 'utf8')
 
     // Use gray-matter to parse the post metadata section
-    const matterResult = matter(fileContents)
+    const matterResult = matter(fileContents);
+    const data = matterResult.data as Frontmatter; // TODO: typescript-is for type guarding
+    if (!options.ignoreHidden && data.hide) {
+      return null;
+    }
 
     // Combine the data with the id
     return {
       id,
-      ...(matterResult.data as Frontmatter)
+      ...(matterResult.data as Frontmatter) 
     }
-  })
+  }).filter(postMetadata => postMetadata !== null);
   // Sort posts by date
   return allPostsData.sort((a, b) => {
     if (a.publishDate < b.publishDate) {
@@ -40,7 +50,7 @@ export function getSortedPostsData(): PostMetadata[] {
     } else {
       return -1
     }
-  })
+  });
 }
 
 export type PostId = {
