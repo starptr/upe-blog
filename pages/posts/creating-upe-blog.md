@@ -61,6 +61,7 @@ Provided that we actually end up using this project, there's still tons of work 
 - LaTeX
   - Also likely a low-hanging fruit, for the same reason as GFM
 - Make adding images not suck, probably by adding support for third-party image hosts
+  - Adding images to `/public/images/` every time you want to insert an image is a bad UX
   - No, using `<img />` tags directly is cheating since that will cause [Cumulative Layout Shifting](https://web.dev/cls/)
 - Parse the article markdown docs into printable PDFs
   - This will probably require displaying the text into letter-page-sized rectangles and using something like [jsPDF](https://github.com/parallax/jsPDF) to generate PDFs from them.

@@ -13,7 +13,7 @@ export default function Home({
   return (
     <Layout home>
       <section className={utilStyles.headingMd}>
-        <p><em>This website is in Beta!</em></p>
+        <p><em>This website is in Beta! Repo is at <a href="https://github.com/starptr/upe-blog">starptr/upe-blog</a> for now.</em></p>
       </section>
       <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
         <h2 className={utilStyles.headingLg}>Blog</h2>
